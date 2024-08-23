@@ -7,18 +7,49 @@
     android:padding="@dimen/_10sdp"
     tools:context=".fragments.HomeFragment">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvUserImage"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="@dimen/_25sdp">
+
+        <ImageView
+            android:id="@+id/ivUserPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile" />
+
+    </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:fontFamily="@font/myfont"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:text="Hello, User!"
+        android:textColor="@color/navy"
+        android:textSize="@dimen/_25ssp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/cvUserImage"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tvDailyInspiration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_25sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         android:fontFamily="@font/myfont"
         android:text="Daily Inspiration"
         android:textColor="@color/navy"
         android:textSize="@dimen/_20ssp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tvWelcome" />
 
 
     <androidx.cardview.widget.CardView
@@ -26,9 +57,9 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/_300sdp"
         android:layout_marginTop="@dimen/_10sdp"
+        app:cardBackgroundColor="@color/bg_color"
         app:cardCornerRadius="@dimen/_20sdp"
         app:cardElevation="@dimen/_10sdp"
-        app:cardBackgroundColor="@color/bg_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

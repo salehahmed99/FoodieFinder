@@ -19,7 +19,8 @@
         app:itemIconTint="@color/nav_item_selector"
         app:itemBackground="@color/white"
         android:background="@color/white"
-        app:menu="@menu/bottom_menu" />
+        app:menu="@menu/menu_bottom"
+        app:labelVisibilityMode="labeled"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
@@ -33,4 +34,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/my_nav" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

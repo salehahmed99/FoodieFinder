@@ -1,28 +1,30 @@
 package com.example.foodapp.fragments
 
-import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodapp.R
+import com.example.foodapp.Util
+import com.example.foodapp.activities.MainActivity
+import com.example.foodapp.activities.SignInActivity
 import com.example.foodapp.adapters.MealAdapter
 import com.example.foodapp.db.MealDatabase
-import com.example.foodapp.network.RetrofitHelper
 import com.example.foodapp.pojo.Meal
-import com.example.foodapp.viewmodels.AllMealsFactory
-import com.example.foodapp.viewmodels.AllMealsViewModel
 import com.example.foodapp.viewmodels.FavouritesFactory
 import com.example.foodapp.viewmodels.FavouritesViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 
 class FavouritesFragment : Fragment() {
@@ -30,6 +32,7 @@ class FavouritesFragment : Fragment() {
     private lateinit var rvFavourites: RecyclerView
     private lateinit var mealAdapter: MealAdapter
     private lateinit var favouritesViewModel: FavouritesViewModel
+    private lateinit var auth : FirebaseAuth
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -38,15 +41,41 @@ class FavouritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        auth = Firebase.auth
         initUI(view)
         setupViewModel()
         setupObserver()
-        favouritesViewModel.getFavourites()
+
+        val currentUser = auth.currentUser
+        if (currentUser != null)
+            favouritesViewModel.getFavouritesByUserId(currentUser.uid)
+        else{
+            Util.showAlertDialog(
+                "Sign In for More Features",
+                "Add your food preferences, plan your meals and more!" ,
+                "Cancel",
+                "Sign In",
+                requireActivity(),
+                SignInActivity::class.java
+            )
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        favouritesViewModel.getFavourites()
+        val currentUser = auth.currentUser
+        if (currentUser != null)
+            favouritesViewModel.getFavouritesByUserId(currentUser.uid)
+        else{
+            Util.showAlertDialog(
+                "Sign In for More Features",
+                "Add your food preferences, plan your meals and more!" ,
+                "Cancel",
+                "Sign In",
+                requireActivity(),
+                SignInActivity::class.java
+            )
+        }
     }
 
 
@@ -70,5 +99,6 @@ class FavouritesFragment : Fragment() {
         }
         favouritesViewModel.favouriteMeals.observe(viewLifecycleOwner, favMealsObserver)
     }
+
 
 }

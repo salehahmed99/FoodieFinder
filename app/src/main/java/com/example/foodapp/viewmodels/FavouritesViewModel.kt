@@ -15,9 +15,9 @@ class FavouritesViewModel(private val mealDao: MealDao) : ViewModel(){
     private val _favouriteMeals: MutableLiveData<List<Meal>> = MutableLiveData()
     val favouriteMeals: LiveData<List<Meal>> = _favouriteMeals
 
-    fun getFavourites(){
+    fun getFavouritesByUserId(userId : String){
         viewModelScope.launch(Dispatchers.IO){
-            val myMeals = mealDao.getAllMeals()
+            val myMeals = mealDao.getMealsByUserId(userId)
             withContext(Dispatchers.Main){
                 _favouriteMeals.postValue(myMeals)
             }

@@ -49,28 +49,33 @@ class MealViewModel(private val retrofitService: RetrofitService, private val me
         }
     }
 
-    fun handleFav(meal: Meal) {
+    fun handleFav(meal: Meal , userId : String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = mealDao.addFav(meal)
-            withContext(Dispatchers.Main) {
-                if (result > 0) {
+            val exists = mealDao.exists(meal.mealId , userId)
+            if (!exists){
+                meal.userId = userId
+                mealDao.addMeal(meal)
+                withContext(Dispatchers.Main){
                     _msg.postValue("Added to favourites")
-                } else {
-                    withContext(Dispatchers.IO) {
-                        mealDao.deleteFav(meal)
-                    }
+                }
+            }
+            else{
+                mealDao.removeMeal(meal.mealId , userId)
+                withContext(Dispatchers.Main){
                     _msg.postValue("Removed from favourites")
                 }
-                isInFav(meal.id)
+            }
+            withContext(Dispatchers.Main){
+                isInFav(meal , userId)
             }
         }
     }
 
-    fun isInFav(id: String) {
+    fun isInFav(meal: Meal , userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = mealDao.isFav(id)
+            val exists = mealDao.exists(meal.mealId , userId)
             withContext(Dispatchers.Main) {
-                _isFav.postValue(result)
+                _isFav.postValue(exists)
             }
         }
     }

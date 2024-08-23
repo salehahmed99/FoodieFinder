@@ -1,5 +1,8 @@
 package com.example.foodapp.activities
 
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -8,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodapp.R
+import com.example.foodapp.Util
 import com.example.foodapp.adapters.IngredientAdapter
 import com.example.foodapp.db.MealDatabase
 import com.example.foodapp.network.RetrofitHelper
@@ -23,6 +28,9 @@ import com.example.foodapp.pojo.Meal
 import com.example.foodapp.viewmodels.MealFactory
 import com.example.foodapp.viewmodels.MealViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 class MealViewActivity : AppCompatActivity() {
     private lateinit var imgBtnBack : ImageButton
@@ -36,10 +44,12 @@ class MealViewActivity : AppCompatActivity() {
     private lateinit var rvIngredients: RecyclerView
     private lateinit var ingredientAdapter: IngredientAdapter
     private lateinit var mealViewModel: MealViewModel
+    private lateinit var auth : FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_meal_view)
         enableEdgeToEdge()
+        setContentView(R.layout.activity_meal_view)
+        auth = Firebase.auth
         initUI()
         setupViewModel()
         setupObservers()
@@ -75,11 +85,27 @@ class MealViewActivity : AppCompatActivity() {
             showData(meal)
             setupWebView(meal)
 
-            mealViewModel.isInFav(meal.id)
+            val currentUser = auth.currentUser
+            if (currentUser != null) {
+                mealViewModel.isInFav(meal, currentUser.uid)
+            }
 
             fabFav.setOnClickListener {
-                mealViewModel.handleFav(meal)
+                if (currentUser != null)
+                    mealViewModel.handleFav(meal, currentUser.uid)
+                else{
+                    Util.showAlertDialog(
+                        "Sign In for More Features",
+                        "Add your food preferences, plan your meals and more!" ,
+                        "Cancel",
+                        "Sign In",
+                        this,
+                        SignInActivity::class.java
+                    )
+                }
             }
+
+
         }
         mealViewModel.meal.observe(this , mealObserver)
 
