@@ -54,7 +54,7 @@ class AllContentsActivity : AppCompatActivity() {
         tvAllContents = findViewById(R.id.tvAllContents)
         rvAllContents = findViewById(R.id.rvAllContents)
         allIngredientsAdapter = IngredientAdapter(listOf() , R.layout.item_vertical_small , this)
-        allCategoriesAdapter = CategoryAdapter(listOf() , R.layout.item_vertical_big , this)
+        allCategoriesAdapter = CategoryAdapter(listOf() , R.layout.item_vertical_small , this)
         allCountriesAdapter = CountryAdapter(listOf() , R.layout.item_vertical_small , this)
         rvAllContents.layoutManager = GridLayoutManager(this,2)
     }

@@ -15,16 +15,10 @@ class FavouritesViewModel(private val mealDao: MealDao) : ViewModel(){
     private val _favouriteMeals: MutableLiveData<List<Meal>> = MutableLiveData()
     val favouriteMeals: LiveData<List<Meal>> = _favouriteMeals
 
-    private val _msg : MutableLiveData<String> = MutableLiveData()
-    val msg : LiveData<String> = _msg
-
     fun getFavourites(){
         viewModelScope.launch(Dispatchers.IO){
             val myMeals = mealDao.getAllMeals()
             withContext(Dispatchers.Main){
-                if (myMeals.isEmpty()){
-                    _msg.postValue("No favourite meals added yet")
-                }
                 _favouriteMeals.postValue(myMeals)
             }
         }

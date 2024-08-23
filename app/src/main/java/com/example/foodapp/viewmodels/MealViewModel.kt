@@ -12,18 +12,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MealViewModel(private val retrofitService: RetrofitService , private val mealDao: MealDao) : ViewModel() {
+class MealViewModel(private val retrofitService: RetrofitService, private val mealDao: MealDao) :
+    ViewModel() {
     private val _randomMeal: MutableLiveData<Meal> = MutableLiveData()
     val randomMeal: LiveData<Meal> = _randomMeal
 
-    private val _meal : MutableLiveData<Meal> = MutableLiveData()
-    val meal : LiveData<Meal> = _meal
+    private val _meal: MutableLiveData<Meal> = MutableLiveData()
+    val meal: LiveData<Meal> = _meal
 
-    private val _msg : MutableLiveData<String> = MutableLiveData()
-    val msg : LiveData<String> = _msg
+    private val _msg: MutableLiveData<String> = MutableLiveData()
+    val msg: LiveData<String> = _msg
 
-    private val _isFav : MutableLiveData<Boolean> = MutableLiveData()
-    val isFav : LiveData<Boolean> = _isFav
+    private val _isFav: MutableLiveData<Boolean> = MutableLiveData()
+    val isFav: LiveData<Boolean> = _isFav
 
     fun getRandomMeal() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -36,54 +37,51 @@ class MealViewModel(private val retrofitService: RetrofitService , private val m
         }
     }
 
-    fun getMealByName(name : String){
-        viewModelScope.launch(Dispatchers.IO){
+    fun getMealByName(name: String) {
+        viewModelScope.launch(Dispatchers.IO) {
             val mealResponse = retrofitService.filterByName(name).body()
             val myMeal = mealResponse?.meals?.get(0)
-            withContext(Dispatchers.Main){
-                if (myMeal != null){
+            withContext(Dispatchers.Main) {
+                if (myMeal != null) {
                     _meal.postValue(myMeal!!)
                 }
             }
         }
     }
 
-    fun handleFav(meal : Meal){
-        viewModelScope.launch(Dispatchers.IO){
+    fun handleFav(meal: Meal) {
+        viewModelScope.launch(Dispatchers.IO) {
             val result = mealDao.addFav(meal)
-            if (result > 0) {
-                withContext(Dispatchers.Main) {
+            withContext(Dispatchers.Main) {
+                if (result > 0) {
                     _msg.postValue("Added to favourites")
-                }
-            }
-                else {
-                mealDao.deleteFav(meal)
-                withContext(Dispatchers.Main){
+                } else {
+                    withContext(Dispatchers.IO) {
+                        mealDao.deleteFav(meal)
+                    }
                     _msg.postValue("Removed from favourites")
                 }
-            }
-            withContext(Dispatchers.Main){
                 isInFav(meal.id)
             }
         }
     }
 
-    fun isInFav(id : String){
-        viewModelScope.launch(Dispatchers.IO){
+    fun isInFav(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
             val result = mealDao.isFav(id)
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 _isFav.postValue(result)
             }
         }
     }
 }
 
-class MealFactory(private val retrofitService: RetrofitService , private val mealDao: MealDao) : ViewModelProvider.Factory{
+class MealFactory(private val retrofitService: RetrofitService, private val mealDao: MealDao) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MealViewModel::class.java)){
-            return MealViewModel(retrofitService , mealDao ) as T
-        }
-        else{
+        if (modelClass.isAssignableFrom(MealViewModel::class.java)) {
+            return MealViewModel(retrofitService, mealDao) as T
+        } else {
             throw IllegalArgumentException()
         }
     }

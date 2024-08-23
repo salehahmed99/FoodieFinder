@@ -7,5 +7,6 @@
     <color name="bg_color">#E9F1F3</color>
     <color name="img_btn_unselected">#80626262</color>
     <color name="img_btn_selected">#FF626262</color>
+    <color name="red">#FF0000</color>
 </resources>
 

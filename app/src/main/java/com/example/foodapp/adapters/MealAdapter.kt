@@ -35,6 +35,8 @@ class MealAdapter(var meals: List<Meal> , val layoutRes : Int , val activity : A
             .load(currentMeal.thumbnail)
             .into(holder.image)
 
+        //holder.image.scaleType = ImageView.ScaleType.CENTER_CROP
+
         holder.mealItem.setOnClickListener {
             val intent = Intent(activity , MealViewActivity::class.java)
             intent.putExtra("MEAL_NAME" , currentMeal.name)
