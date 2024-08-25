@@ -30,28 +30,32 @@ class AllMealsActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_all_meals)
         initUI()
+        prepareRecyclerView()
         setupViewModel()
         setupObservers()
         val filter = intent.getCharExtra("FILTER", 'f')
-        val name = intent.getStringExtra("NAME")
         when (filter) {
             'i' -> {
-                tvAllMeals.text = "Filter by ingredient : ${name}"
-                allMealsViewModel.getMealsByIngredient(name!!)
+                val ingredientName = intent.getStringExtra("NAME")
+                tvAllMeals.text = "Filter by ingredient : ${ingredientName}"
+                allMealsViewModel.getMealsByIngredient(ingredientName!!)
             }
 
             'c' -> {
-                tvAllMeals.text = "Filter by category : ${name}"
-                allMealsViewModel.getMealsByCateory(name!!)
+                val categoryName = intent.getStringExtra("NAME")
+                tvAllMeals.text = "Filter by category : ${categoryName}"
+                allMealsViewModel.getMealsByCategory(categoryName!!)
             }
 
             'a' -> {
-                tvAllMeals.text = "Filter by country : ${name}"
-                allMealsViewModel.getMealsByCountry(name!!)
+                val countryName = intent.getStringExtra("NAME")
+                tvAllMeals.text = "Filter by country : ${countryName}"
+                allMealsViewModel.getMealsByCountry(countryName!!)
             }
             'n'->{
-                tvAllMeals.text = "Filter by name : ${name}"
-                allMealsViewModel.getMealsByName(name!!)
+                val mealName = intent.getStringExtra("NAME")
+                tvAllMeals.text = "Filter by name : ${mealName}"
+                allMealsViewModel.getMealsByName(mealName!!)
             }
         }
         onBackBtnClick()
@@ -63,6 +67,9 @@ class AllMealsActivity : AppCompatActivity() {
         imgBtnBack = findViewById(R.id.imgBtnBack)
         tvAllMeals = findViewById(R.id.tvAllMeals)
         rvAllMeals = findViewById(R.id.rvAllMeals)
+    }
+
+    private fun prepareRecyclerView(){
         mealAdapter = MealAdapter(listOf(), R.layout.item_vertical_big , this)
         rvAllMeals.adapter = mealAdapter
         rvAllMeals.layoutManager = GridLayoutManager(this, 2)

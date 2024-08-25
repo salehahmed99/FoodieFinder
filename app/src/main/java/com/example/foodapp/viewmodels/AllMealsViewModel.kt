@@ -28,7 +28,7 @@ class AllMealsViewModel(val retrofitService: RetrofitService) : ViewModel() {
         }
     }
 
-    fun getMealsByCateory(name : String){
+    fun getMealsByCategory(name : String){
         viewModelScope.launch(Dispatchers.IO){
             val mealResponse = retrofitService.filterByCategory(name).body()
             val myMeals = mealResponse?.meals

@@ -39,7 +39,7 @@ class MealAdapter(var meals: List<Meal> , val layoutRes : Int , val activity : A
 
         holder.mealItem.setOnClickListener {
             val intent = Intent(activity , MealViewActivity::class.java)
-            intent.putExtra("MEAL_NAME" , currentMeal.name)
+            intent.putExtra("MEAL_ID" , currentMeal.mealId)
             activity.startActivity(intent)
         }
 

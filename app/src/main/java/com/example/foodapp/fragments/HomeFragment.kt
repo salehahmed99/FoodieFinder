@@ -1,8 +1,10 @@
 package com.example.foodapp.fragments
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,16 +16,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodapp.R
 import com.example.foodapp.Util
 import com.example.foodapp.activities.MealViewActivity
 import com.example.foodapp.activities.SignInActivity
-import com.example.foodapp.db.MealDatabase
-import com.example.foodapp.viewmodels.MealFactory
+import com.example.foodapp.adapters.MealAdapter
 import com.example.foodapp.viewmodels.MealViewModel
 import com.example.foodapp.pojo.Meal
 import com.example.foodapp.network.RetrofitHelper
+import com.example.foodapp.viewmodels.HomeFactory
+import com.example.foodapp.viewmodels.HomeViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -39,8 +44,9 @@ class HomeFragment : Fragment() {
     private lateinit var tvRandomMeal : TextView
     private lateinit var ivRandomMeal : ImageView
     private lateinit var progressBar: ProgressBar
-    private lateinit var mealViewModel: MealViewModel
-    private lateinit var randomMeal : Meal
+    private lateinit var rvPopularMeals : RecyclerView
+    private lateinit var mealAdapter: MealAdapter
+    private lateinit var homeViewModel: HomeViewModel
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -54,15 +60,44 @@ class HomeFragment : Fragment() {
         auth = Firebase.auth
         setupFirebase()
         initUI(view)
+        showUserName()
+        showUserPhoto()
+        handleUserPhotoOnClick()
+        prepareRecyclerView()
         setupViewModel()
         setupObserver()
-        mealViewModel.getRandomMeal()
-        cvDailyInspiration.setOnClickListener {
-            val intent = Intent(requireActivity() , MealViewActivity::class.java)
-            intent.putExtra("MEAL_NAME" , randomMeal.name)
-            startActivity(intent)
-        }
+    }
 
+    private fun initUI(view : View){
+        tvWelcome = view.findViewById(R.id.tvWelcome)
+        userPhoto = view.findViewById(R.id.ivUserPhoto)
+        cvDailyInspiration = view.findViewById(R.id.cvDailyInspiration)
+        tvRandomMeal = view.findViewById(R.id.tvRandomMeal)
+        ivRandomMeal = view.findViewById(R.id.ivRandomMeal)
+        progressBar = view.findViewById(R.id.progressBar)
+        progressBar.visibility = View.VISIBLE
+        rvPopularMeals = view.findViewById(R.id.rvPopularMeals)
+    }
+
+    private fun showUserName(){
+        val firstName = auth.currentUser?.displayName?.split(" ")?.get(0)
+        if (firstName != null)
+            tvWelcome.text = "Hello, $firstName!"
+        else
+            tvWelcome.text = "Hello, Guest!"
+    }
+
+    private fun showUserPhoto(){
+        val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(requireActivity())
+        if (googleSignInAccount != null) {
+            val photoUrl = googleSignInAccount.photoUrl
+            Glide.with(this)
+                .load(photoUrl)
+                .into(userPhoto)
+        }
+    }
+
+    private fun handleUserPhotoOnClick() {
         userPhoto.setOnClickListener {
             val currentUser = auth.currentUser
             if (currentUser == null){
@@ -81,33 +116,26 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun initUI(view : View){
-        tvWelcome = view.findViewById(R.id.tvWelcome)
-        val firstName = auth.currentUser?.displayName?.split(" ")?.get(0)
-        if (firstName != null)
-            tvWelcome.text = "Hello, $firstName!"
-        else
-            tvWelcome.text = "Hello, Guest!"
-
-        userPhoto = view.findViewById(R.id.ivUserPhoto)
-        showUserPhoto()
-        cvDailyInspiration = view.findViewById(R.id.cvDailyInspiration)
-        tvRandomMeal = view.findViewById(R.id.tvRandomMeal)
-        ivRandomMeal = view.findViewById(R.id.ivRandomMeal)
-        progressBar = view.findViewById(R.id.progressBar)
-        progressBar.visibility = View.VISIBLE
+    private fun prepareRecyclerView(){
+        mealAdapter = MealAdapter(listOf() , R.layout.item_horizontal_big , requireActivity())
+        rvPopularMeals.adapter = mealAdapter
+        rvPopularMeals.layoutManager = LinearLayoutManager(requireActivity() , RecyclerView.HORIZONTAL , false)
     }
     private fun setupViewModel(){
         val retrofitService = RetrofitHelper.retrofitService
-        val mealDao = MealDatabase.getInstance(requireActivity()).getMealDao()
-        val factory = MealFactory(retrofitService , mealDao)
-        mealViewModel = ViewModelProvider(this , factory).get(MealViewModel::class.java)
+        val factory = HomeFactory(retrofitService)
+        homeViewModel = ViewModelProvider(this , factory).get(HomeViewModel::class.java)
     }
     private fun setupObserver(){
         val mealObserver = Observer<Meal> { randomMeal ->
-            this.randomMeal = randomMeal
-            showData(randomMeal) }
-        mealViewModel.randomMeal.observe(viewLifecycleOwner , mealObserver)
+            showData(randomMeal)
+            cvDailyInspiration.setOnClickListener {
+                val intent = Intent(requireActivity() , MealViewActivity::class.java)
+                intent.putExtra("MEAL_ID" , randomMeal.mealId)
+                startActivity(intent)
+            }
+        }
+        homeViewModel.randomMeal.observe(viewLifecycleOwner , mealObserver)
     }
 
     private fun showData(randomMeal : Meal){
@@ -119,15 +147,6 @@ class HomeFragment : Fragment() {
         tvRandomMeal.text = randomMeal.name
     }
 
-    private fun showUserPhoto(){
-        val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(requireActivity())
-        if (googleSignInAccount != null) {
-            val photoUrl = googleSignInAccount.photoUrl
-            Glide.with(this)
-                .load(photoUrl)
-                .into(userPhoto)
-        }
-    }
 
     private fun setupFirebase(){
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -156,10 +175,8 @@ class HomeFragment : Fragment() {
                 "No, Go Back", DialogInterface.OnClickListener { dialogInterface, i ->
                     dialogInterface.cancel()
                 })
-            .setPositiveButton(
-                "Yes, I'm Sure", DialogInterface.OnClickListener { dialogInterface, i ->
-                    signOutAndStartSignInActivity()
-                })
+            .setPositiveButton("Yes, Sign Out") {dialogInterface, i -> signOutAndStartSignInActivity() }
             .create().show()
     }
+
 }

@@ -1,8 +1,5 @@
 package com.example.foodapp.activities
 
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -11,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -45,21 +41,30 @@ class MealViewActivity : AppCompatActivity() {
     private lateinit var ingredientAdapter: IngredientAdapter
     private lateinit var mealViewModel: MealViewModel
     private lateinit var auth : FirebaseAuth
+    private  var mealId : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_meal_view)
         auth = Firebase.auth
         initUI()
+        prepareRecyclerView()
         setupViewModel()
         setupObservers()
 
-        mealViewModel.getMealByName(intent.getStringExtra("MEAL_NAME")!!)
+        mealId = intent.getStringExtra("MEAL_ID")
+        mealViewModel.getMealByMealId(mealId!!)
+
+        val currentUser = auth.currentUser
+        if (currentUser != null)
+            mealViewModel.isInFav(mealId!!, currentUser.uid)
+
+        onFavBtnClick()
         onBackBtnClick()
 
     }
 
-    private fun initUI(){
+    private fun initUI() {
         imgBtnBack = findViewById(R.id.imgBtnBack)
         fabFav = findViewById(R.id.fabFav)
         ivMeal = findViewById(R.id.ivMeal)
@@ -69,6 +74,8 @@ class MealViewActivity : AppCompatActivity() {
         tvStepByStep = findViewById(R.id.tvStepByStep)
         webView = findViewById(R.id.webView)
         rvIngredients = findViewById(R.id.rvIngredients)
+    }
+    private fun prepareRecyclerView(){
         ingredientAdapter = IngredientAdapter(listOf() , R.layout.item_vertical_small , this)
         rvIngredients.adapter = ingredientAdapter
         rvIngredients.layoutManager = GridLayoutManager(this,2)
@@ -84,28 +91,6 @@ class MealViewActivity : AppCompatActivity() {
         val mealObserver = Observer<Meal> { meal ->
             showData(meal)
             setupWebView(meal)
-
-            val currentUser = auth.currentUser
-            if (currentUser != null) {
-                mealViewModel.isInFav(meal, currentUser.uid)
-            }
-
-            fabFav.setOnClickListener {
-                if (currentUser != null)
-                    mealViewModel.handleFav(meal, currentUser.uid)
-                else{
-                    Util.showAlertDialog(
-                        "Sign In for More Features",
-                        "Add your food preferences, plan your meals and more!" ,
-                        "Cancel",
-                        "Sign In",
-                        this,
-                        SignInActivity::class.java
-                    )
-                }
-            }
-
-
         }
         mealViewModel.meal.observe(this , mealObserver)
 
@@ -126,6 +111,23 @@ class MealViewActivity : AppCompatActivity() {
         mealViewModel.isFav.observe(this , isFavObserver)
     }
 
+    private fun onFavBtnClick(){
+        fabFav.setOnClickListener {
+            val currentUser = auth.currentUser
+            if (currentUser != null)
+                mealViewModel.handleFav(mealId!! , currentUser.uid)
+            else{
+                Util.showAlertDialog(
+                    "Sign In for More Features",
+                    "Add your food preferences, plan your meals and more!" ,
+                    "Cancel",
+                    "Sign In",
+                    this,
+                    SignInActivity::class.java
+                )
+            }
+        }
+    }
     private fun showData(meal : Meal){
         Glide.with(this)
             .load(meal.thumbnail)

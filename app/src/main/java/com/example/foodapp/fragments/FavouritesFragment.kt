@@ -1,8 +1,10 @@
 package com.example.foodapp.fragments
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -43,45 +45,22 @@ class FavouritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         auth = Firebase.auth
         initUI(view)
+        prepareRecyclerView()
         setupViewModel()
         setupObserver()
-
-        val currentUser = auth.currentUser
-        if (currentUser != null)
-            favouritesViewModel.getFavouritesByUserId(currentUser.uid)
-        else{
-            Util.showAlertDialog(
-                "Sign In for More Features",
-                "Add your food preferences, plan your meals and more!" ,
-                "Cancel",
-                "Sign In",
-                requireActivity(),
-                SignInActivity::class.java
-            )
-        }
+        showFavourites()
     }
 
     override fun onResume() {
         super.onResume()
-        val currentUser = auth.currentUser
-        if (currentUser != null)
-            favouritesViewModel.getFavouritesByUserId(currentUser.uid)
-        else{
-            Util.showAlertDialog(
-                "Sign In for More Features",
-                "Add your food preferences, plan your meals and more!" ,
-                "Cancel",
-                "Sign In",
-                requireActivity(),
-                SignInActivity::class.java
-            )
-        }
+        showFavourites()        //This is to update the favourites when the user clicks on a meal and goes back
     }
-
-
     private fun initUI(view : View){
         tvFavourites = view.findViewById(R.id.tvFavourites)
         rvFavourites = view.findViewById(R.id.rvFavourites)
+    }
+
+    private fun prepareRecyclerView(){
         mealAdapter = MealAdapter(listOf(), R.layout.item_vertical_big , requireActivity())
         rvFavourites.adapter = mealAdapter
         rvFavourites.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -98,6 +77,22 @@ class FavouritesFragment : Fragment() {
             mealAdapter.notifyDataSetChanged()
         }
         favouritesViewModel.favouriteMeals.observe(viewLifecycleOwner, favMealsObserver)
+    }
+
+    private fun showFavourites(){
+        val currentUser = auth.currentUser
+        if (currentUser != null)
+            favouritesViewModel.getFavouritesByUserId(currentUser.uid)
+        else{
+            Util.showAlertDialog(
+                "Sign In for More Features",
+                "Add your food preferences, plan your meals and more!" ,
+                "Cancel",
+                "Sign In",
+                requireActivity(),
+                SignInActivity::class.java
+            )
+        }
     }
 
 

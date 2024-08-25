@@ -31,6 +31,9 @@ interface RetrofitService {
     @GET("search.php")
     suspend fun filterByName(@Query("s") name : String) : Response<MealResponse>
 
+    @GET("lookup.php")
+    suspend fun getMealById(@Query("i" )id : String) : Response<MealResponse>
+
     @GET("random.php")
     suspend fun getRandomMeal() : Response<MealResponse>
 

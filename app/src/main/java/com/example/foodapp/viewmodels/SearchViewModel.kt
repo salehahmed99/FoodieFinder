@@ -23,8 +23,12 @@ class SearchViewModel(val retrofitService: RetrofitService) : ViewModel() {
     private val _countries : MutableLiveData<List<Country>> = MutableLiveData()
     val countries : LiveData<List<Country>> = _countries
 
-
-    fun getAllCategories(){
+    init {
+        getAllCategories()
+        getAllIngredients()
+        getAllCountries()
+    }
+    private fun getAllCategories(){
         viewModelScope.launch(Dispatchers.IO){
             val categoryResonse = retrofitService.getAllCategories().body()
             val myCategories = categoryResonse?.categories
@@ -36,7 +40,7 @@ class SearchViewModel(val retrofitService: RetrofitService) : ViewModel() {
         }
     }
 
-    fun getAllIngredients() {
+    private fun getAllIngredients() {
         viewModelScope.launch(Dispatchers.IO){
             val ingredientsResponse = retrofitService.getAllIngredients().body()
             val myIngredients = ingredientsResponse?.ingredients
@@ -48,7 +52,7 @@ class SearchViewModel(val retrofitService: RetrofitService) : ViewModel() {
         }
     }
 
-    fun getAllCountries(){
+    private fun getAllCountries(){
         viewModelScope.launch(Dispatchers.IO){
             val countryResponse = retrofitService.getAllCountries().body()
             val myCountries = countryResponse?.countries

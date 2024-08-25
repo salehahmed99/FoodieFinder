@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.foodapp.pojo.Meal
 
-@Database(entities = [Meal::class] , version = 5)
+@Database(entities = [Meal::class] , version = 6)
 abstract class MealDatabase : RoomDatabase() {
     abstract fun getMealDao() : MealDao
 

@@ -1,7 +1,9 @@
 package com.example.foodapp.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -51,48 +53,21 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI(view)
+        prepareRecyclerViews()
         setupViewModel()
         setupObservers()
-        searchViewModel.getAllCategories()
-        searchViewModel.getAllIngredients()
-        searchViewModel.getAllCountries()
 
-        tvViewAllIngredients.setOnClickListener{
-            val intent = Intent(requireActivity() , AllContentsActivity::class.java)
-            intent.putExtra("INGREDIENTS" , allIngredients.toTypedArray())
-            intent.putExtra("CHOICE" , 1)
-            startActivity(intent)
-        }
+        handleSearchBar()
+        handleViewAllIngredients()
+        handleViewAllCategories()
+        handleViewAllCountries()
 
-        tvViewAllCategories.setOnClickListener{
-            val intent = Intent(requireActivity() , AllContentsActivity::class.java)
-            intent.putExtra("CATEGORIES" , allCategories.toTypedArray())
-            intent.putExtra("CHOICE" , 2)
-            startActivity(intent)
-        }
-
-        tvViewAllCountries.setOnClickListener{
-            val intent = Intent(requireActivity() , AllContentsActivity::class.java)
-            intent.putExtra("COUNTRIES" , allCountries.toTypedArray())
-            intent.putExtra("CHOICE" , 3)
-            startActivity(intent)
-        }
+    }
 
 
-        searchBar.setOnQueryTextListener(object : OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                val intent = Intent(requireActivity() , AllMealsActivity::class.java)
-                intent.putExtra("NAME" , query)
-                intent.putExtra("FILTER", 'n')
-                startActivity(intent)
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-        })
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.i("Search fragment" , "onAttach")
     }
 
     private fun initUI(view : View){
@@ -101,22 +76,22 @@ class SearchFragment : Fragment() {
         tvViewAllIngredients = view.findViewById(R.id.tvViewAllIngredients)
         tvViewAllCategories = view.findViewById(R.id.tvViewAllCategories)
         tvViewAllCountries = view.findViewById(R.id.tvViewAllCountries)
-
         rvCategories = view.findViewById(R.id.rvCategories)
-        categoryAdapter = CategoryAdapter(listOf() , R.layout.item_horizontal_big , requireActivity())
+        rvIngredients = view.findViewById(R.id.rvIngredients)
+        rvCountries = view.findViewById(R.id.rvCountries)
+    }
+    private fun prepareRecyclerViews(){
+        categoryAdapter = CategoryAdapter(listOf() , R.layout.item_horizontal_small , requireActivity())
         rvCategories.adapter = categoryAdapter
         rvCategories.layoutManager = LinearLayoutManager(requireActivity() , RecyclerView.HORIZONTAL , false)
 
-        rvIngredients = view.findViewById(R.id.rvIngredients)
         ingredientAdapter = IngredientAdapter(listOf() , R.layout.item_horizontal_small , requireActivity())
         rvIngredients.adapter = ingredientAdapter
         rvIngredients.layoutManager = LinearLayoutManager(requireActivity() , RecyclerView.HORIZONTAL , false)
 
-        rvCountries = view.findViewById(R.id.rvCountries)
         countryAdapter = CountryAdapter(listOf() , R.layout.item_horizontal_small , requireActivity())
         rvCountries.adapter = countryAdapter
         rvCountries.layoutManager = LinearLayoutManager(requireActivity() , RecyclerView.HORIZONTAL , false)
-
 
     }
 
@@ -149,6 +124,47 @@ class SearchFragment : Fragment() {
         searchViewModel.countries.observe(viewLifecycleOwner , countryObserver)
     }
 
+    private fun handleViewAllIngredients(){
+        tvViewAllIngredients.setOnClickListener{
+            val intent = Intent(requireActivity() , AllContentsActivity::class.java)
+            intent.putExtra("INGREDIENTS" , allIngredients.toTypedArray())
+            intent.putExtra("CHOICE" , 1)
+            startActivity(intent)
+        }
+    }
 
+    private fun handleViewAllCategories(){
+        tvViewAllCategories.setOnClickListener{
+            val intent = Intent(requireActivity() , AllContentsActivity::class.java)
+            intent.putExtra("CATEGORIES" , allCategories.toTypedArray())
+            intent.putExtra("CHOICE" , 2)
+            startActivity(intent)
+        }
+    }
+
+    private fun handleViewAllCountries(){
+        tvViewAllCountries.setOnClickListener{
+            val intent = Intent(requireActivity() , AllContentsActivity::class.java)
+            intent.putExtra("COUNTRIES" , allCountries.toTypedArray())
+            intent.putExtra("CHOICE" , 3)
+            startActivity(intent)
+        }
+    }
+
+    private fun handleSearchBar(){
+        searchBar.setOnQueryTextListener(object : OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val intent = Intent(requireActivity() , AllMealsActivity::class.java)
+                intent.putExtra("NAME" , query)
+                intent.putExtra("FILTER", 'n')
+                startActivity(intent)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
+    }
 
 }

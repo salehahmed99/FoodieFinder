@@ -1,5 +1,6 @@
 package com.example.foodapp.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,10 +13,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MealViewModel(private val retrofitService: RetrofitService, private val mealDao: MealDao) :
+class MealViewModel(
+    private val retrofitService: RetrofitService,
+    private val mealDao: MealDao
+) :
     ViewModel() {
-    private val _randomMeal: MutableLiveData<Meal> = MutableLiveData()
-    val randomMeal: LiveData<Meal> = _randomMeal
 
     private val _meal: MutableLiveData<Meal> = MutableLiveData()
     val meal: LiveData<Meal> = _meal
@@ -26,20 +28,10 @@ class MealViewModel(private val retrofitService: RetrofitService, private val me
     private val _isFav: MutableLiveData<Boolean> = MutableLiveData()
     val isFav: LiveData<Boolean> = _isFav
 
-    fun getRandomMeal() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val randomMealResponse = retrofitService.getRandomMeal().body()
-            val myMeal = randomMealResponse?.meals?.get(0)
-            withContext(Dispatchers.Main) {
-                if (myMeal != null)
-                    _randomMeal.postValue(myMeal!!)
-            }
-        }
-    }
 
-    fun getMealByName(name: String) {
+    fun getMealByMealId(mealId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val mealResponse = retrofitService.filterByName(name).body()
+            val mealResponse = retrofitService.getMealById(mealId).body()
             val myMeal = mealResponse?.meals?.get(0)
             withContext(Dispatchers.Main) {
                 if (myMeal != null) {
@@ -49,39 +41,47 @@ class MealViewModel(private val retrofitService: RetrofitService, private val me
         }
     }
 
-    fun handleFav(meal: Meal , userId : String) {
+    fun handleFav(mealId: String, userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val exists = mealDao.exists(meal.mealId , userId)
-            if (!exists){
-                meal.userId = userId
-                mealDao.addMeal(meal)
-                withContext(Dispatchers.Main){
+            val exists = mealDao.exists(mealId, userId)
+            if (!exists) {
+                val mealResponse = retrofitService.getMealById(mealId).body()
+                val myMeal = mealResponse?.meals?.get(0)
+                if (myMeal != null) {
+                    myMeal.userId = userId
+                    mealDao.addMeal(myMeal)
+                }
+                withContext(Dispatchers.Main) {
                     _msg.postValue("Added to favourites")
                 }
-            }
-            else{
-                mealDao.removeMeal(meal.mealId , userId)
-                withContext(Dispatchers.Main){
+            } else {
+                mealDao.removeMeal(mealId, userId)
+                withContext(Dispatchers.Main) {
                     _msg.postValue("Removed from favourites")
                 }
             }
-            withContext(Dispatchers.Main){
-                isInFav(meal , userId)
+            withContext(Dispatchers.Main) {
+                isInFav(mealId , userId)
             }
         }
     }
 
-    fun isInFav(meal: Meal , userId: String) {
+    fun isInFav(mealId: String, userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val exists = mealDao.exists(meal.mealId , userId)
+            val exists = mealDao.exists(mealId, userId)
             withContext(Dispatchers.Main) {
                 _isFav.postValue(exists)
             }
+
         }
     }
+
 }
 
-class MealFactory(private val retrofitService: RetrofitService, private val mealDao: MealDao) :
+class MealFactory(
+    private val retrofitService: RetrofitService,
+    private val mealDao: MealDao,
+) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MealViewModel::class.java)) {

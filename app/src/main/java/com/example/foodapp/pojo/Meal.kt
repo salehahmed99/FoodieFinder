@@ -6,8 +6,8 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = "meals_table")
 data class Meal(
     @PrimaryKey(autoGenerate = true) val recordID : Int = 0,
-    var userId : String,
-    @SerializedName("idMeal") val mealId: String,
+    var userId : String? = null,
+    @SerializedName("idMeal") val mealId: String?,
     @SerializedName("strMeal") val name: String?,
     @SerializedName("strCategory") val category: String?,
     @SerializedName("strArea") val country: String?,
