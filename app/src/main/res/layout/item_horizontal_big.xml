@@ -2,8 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/_160sdp"
-    android:layout_height="@dimen/_160sdp"
-    android:layout_marginTop="@dimen/_10sdp"
+    android:layout_height="@dimen/_180sdp"
     android:layout_marginBottom="@dimen/_10sdp"
     android:layout_marginEnd="@dimen/_10sdp"
     app:cardCornerRadius="@dimen/_20sdp"
@@ -12,13 +11,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/_5sdp">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="@dimen/_8sdp"
             app:layout_constraintBottom_toTopOf="@+id/tvName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -29,15 +29,16 @@
             android:id="@+id/tvName"
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
-            android:gravity="center"
-            tools:text="Beef"
+            android:layout_margin="@dimen/_8sdp"
+            android:ellipsize="end"
+            android:maxLines="2"
             android:textColor="@color/navy"
-            android:textSize="@dimen/_15ssp"
+            android:textSize="@dimen/_14ssp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Beef" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -111,7 +111,7 @@ class SearchFragment : Fragment() {
 
         val categoryObserver = Observer<List<Category>>{categories ->
             allCategories = categories
-            categoryAdapter.categories = categories.subList(0,5)
+            categoryAdapter.categories = categories.subList(0,10)
             categoryAdapter.notifyDataSetChanged()
         }
         searchViewModel.categories.observe(viewLifecycleOwner , categoryObserver)

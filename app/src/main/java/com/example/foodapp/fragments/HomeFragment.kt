@@ -1,10 +1,8 @@
 package com.example.foodapp.fragments
 
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +22,6 @@ import com.example.foodapp.Util
 import com.example.foodapp.activities.MealViewActivity
 import com.example.foodapp.activities.SignInActivity
 import com.example.foodapp.adapters.MealAdapter
-import com.example.foodapp.viewmodels.MealViewModel
 import com.example.foodapp.pojo.Meal
 import com.example.foodapp.network.RetrofitHelper
 import com.example.foodapp.viewmodels.HomeFactory
@@ -45,7 +42,7 @@ class HomeFragment : Fragment() {
     private lateinit var ivRandomMeal : ImageView
     private lateinit var progressBar: ProgressBar
     private lateinit var rvPopularMeals : RecyclerView
-    private lateinit var mealAdapter: MealAdapter
+    private lateinit var popularMealsAdapter: MealAdapter
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -65,7 +62,7 @@ class HomeFragment : Fragment() {
         handleUserPhotoOnClick()
         prepareRecyclerView()
         setupViewModel()
-        setupObserver()
+        setupObservers()
     }
 
     private fun initUI(view : View){
@@ -117,8 +114,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun prepareRecyclerView(){
-        mealAdapter = MealAdapter(listOf() , R.layout.item_horizontal_big , requireActivity())
-        rvPopularMeals.adapter = mealAdapter
+        popularMealsAdapter = MealAdapter(listOf() , R.layout.item_horizontal_big , requireActivity())
+        rvPopularMeals.adapter = popularMealsAdapter
         rvPopularMeals.layoutManager = LinearLayoutManager(requireActivity() , RecyclerView.HORIZONTAL , false)
     }
     private fun setupViewModel(){
@@ -126,7 +123,7 @@ class HomeFragment : Fragment() {
         val factory = HomeFactory(retrofitService)
         homeViewModel = ViewModelProvider(this , factory).get(HomeViewModel::class.java)
     }
-    private fun setupObserver(){
+    private fun setupObservers(){
         val mealObserver = Observer<Meal> { randomMeal ->
             showData(randomMeal)
             cvDailyInspiration.setOnClickListener {
@@ -136,6 +133,12 @@ class HomeFragment : Fragment() {
             }
         }
         homeViewModel.randomMeal.observe(viewLifecycleOwner , mealObserver)
+
+        val popularMealsObserver = Observer<List<Meal>>{popularMeals ->
+            popularMealsAdapter.meals = popularMeals
+            popularMealsAdapter.notifyDataSetChanged()
+        }
+        homeViewModel.popularMeals.observe(viewLifecycleOwner , popularMealsObserver)
     }
 
     private fun showData(randomMeal : Meal){
