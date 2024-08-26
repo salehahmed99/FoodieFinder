@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.foodapp.R
 import com.example.foodapp.activities.AllContentsActivity
 import com.example.foodapp.activities.AllMealsActivity
+import com.example.foodapp.activities.MainActivity
 import com.example.foodapp.activities.MealViewActivity
 import com.example.foodapp.adapters.CategoryAdapter
 import com.example.foodapp.adapters.CountryAdapter
@@ -31,6 +33,7 @@ import com.example.foodapp.viewmodels.SearchViewModel
 
 
 class SearchFragment : Fragment() {
+    private lateinit var userPhoto : ImageView
     private lateinit var searchBar : SearchView
     private lateinit var tvViewAllIngredients : TextView
     private lateinit var tvViewAllCategories : TextView
@@ -42,7 +45,6 @@ class SearchFragment : Fragment() {
     private lateinit var countryAdapter: CountryAdapter
     private lateinit var ingredientAdapter: IngredientAdapter
     private lateinit var searchViewModel: SearchViewModel
-
     private lateinit var allIngredients : List<Ingredient>
     private lateinit var allCategories : List<Category>
     private lateinit var allCountries : List<Country>
@@ -62,6 +64,10 @@ class SearchFragment : Fragment() {
         handleViewAllCategories()
         handleViewAllCountries()
 
+        val mainActivity  = requireActivity() as MainActivity
+        mainActivity.showUserPhoto(userPhoto)
+        mainActivity.handleUserPhotoOnClick(userPhoto)
+
     }
 
 
@@ -71,7 +77,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun initUI(view : View){
-
+        userPhoto = view.findViewById(R.id.ivUserPhoto)
         searchBar = view.findViewById(R.id.search_bar)
         tvViewAllIngredients = view.findViewById(R.id.tvViewAllIngredients)
         tvViewAllCategories = view.findViewById(R.id.tvViewAllCategories)

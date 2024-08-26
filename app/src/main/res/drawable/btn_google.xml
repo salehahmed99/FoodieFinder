@@ -1,0 +1,12 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape>
+            <solid android:color="#F2F2F2" />
+            <corners android:radius="@dimen/_25sdp" />
+        </shape>
+    </item>
+
+    <item android:drawable="?attr/selectableItemBackground" />
+
+</layer-list>

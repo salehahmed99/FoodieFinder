@@ -11,16 +11,16 @@
         android:id="@+id/bot_nav_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:itemBackground="@color/white"
+        app:itemIconTint="@color/nav_item_selector"
+        app:itemTextColor="@color/nav_item_selector"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:itemTextColor="@color/nav_item_selector"
-        app:itemIconTint="@color/nav_item_selector"
-        app:itemBackground="@color/white"
-        android:background="@color/white"
-        app:menu="@menu/menu_bottom"
-        app:labelVisibilityMode="labeled"/>
+        app:menu="@menu/menu_bottom" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"

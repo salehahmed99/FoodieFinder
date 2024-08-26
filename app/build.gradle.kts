@@ -87,5 +87,8 @@ dependencies {
     //Splash Screen
     implementation("androidx.core:core-splashscreen:1.0.0")
 
+    //Facebook Log in
+    implementation ("com.facebook.android:facebook-android-sdk:latest.release")
+
 
 }

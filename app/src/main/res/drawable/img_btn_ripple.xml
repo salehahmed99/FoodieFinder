@@ -2,8 +2,7 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="@color/img_btn_selected">
     <item>
-        <shape
-            android:shape="oval">
+        <shape android:shape="oval">
             <solid android:color="@color/img_btn_unselected" /> <!-- Replace with your desired color -->
             <size
                 android:width="35dp"

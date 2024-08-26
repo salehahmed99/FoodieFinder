@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomAlertDialog" parent="Theme.Material3.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/white</item>
+        <item name="buttonBarPositiveButtonStyle">@style/CustomPositiveButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/CustomNegativeButton</item>
+        <item name="android:textColorPrimary">@color/black</item>
+    </style>
+
+    <style name="CustomPositiveButton" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/navy</item>
+        <item name="backgroundTint">@color/white</item>
+    </style>
+
+    <style name="CustomNegativeButton" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/navy</item>
+        <item name="backgroundTint">@color/white</item>
+    </style>
+</resources>
