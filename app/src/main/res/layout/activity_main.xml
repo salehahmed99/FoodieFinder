@@ -7,6 +7,45 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvUserImage"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginTop="@dimen/_35sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_25sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivUserPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"/>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_35sdp"
+        android:fontFamily="@font/myfont"
+        android:text="Home"
+        android:textColor="@color/navy"
+        android:textSize="@dimen/_25ssp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bot_nav_view"
         android:layout_width="0dp"
@@ -32,8 +71,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/my_nav" />
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:navGraph="@navigation/nav_main_activity" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

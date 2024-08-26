@@ -1,6 +1,5 @@
 package com.example.foodapp.fragments
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,25 +16,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodapp.R
-import com.example.foodapp.Util
 import com.example.foodapp.activities.MainActivity
 import com.example.foodapp.activities.MealViewActivity
-import com.example.foodapp.activities.SignInActivity
 import com.example.foodapp.adapters.MealAdapter
 import com.example.foodapp.pojo.Meal
 import com.example.foodapp.network.RetrofitHelper
 import com.example.foodapp.viewmodels.HomeFactory
 import com.example.foodapp.viewmodels.HomeViewModel
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 
 
 class HomeFragment : Fragment() {
-    private lateinit var userPhoto : ImageView
     private lateinit var cvDailyInspiration : CardView
     private lateinit var tvRandomMeal : TextView
     private lateinit var ivRandomMeal : ImageView
@@ -56,13 +45,9 @@ class HomeFragment : Fragment() {
         prepareRecyclerView()
         setupViewModel()
         setupObservers()
-        val mainActivity  = requireActivity() as MainActivity
-        mainActivity.showUserPhoto(userPhoto)
-        mainActivity.handleUserPhotoOnClick(userPhoto)
     }
 
     private fun initUI(view : View){
-        userPhoto = view.findViewById(R.id.ivUserPhoto)
         cvDailyInspiration = view.findViewById(R.id.cvDailyInspiration)
         tvRandomMeal = view.findViewById(R.id.tvRandomMeal)
         ivRandomMeal = view.findViewById(R.id.ivRandomMeal)

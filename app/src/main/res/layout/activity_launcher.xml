@@ -5,23 +5,19 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/_10sdp"
-    tools:context=".fragments.FavouritesFragment">
+    tools:context=".activities.LauncherActivity">
 
-
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFavourites"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/_10sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:defaultNavHost="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:navGraph="@navigation/nav_launcher_activity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,7 +16,8 @@
 
     <!-- Surface color. -->
     <item name="colorSurface">@color/white</item>
-    <item name="colorOnSurface">@color/white</item>
+    <!-- Edit Text border color-->
+    <item name="colorOnSurface">@color/navy</item>
 
     <!-- Error color. -->
     <item name="colorError">@color/white</item>

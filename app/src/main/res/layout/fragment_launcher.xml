@@ -6,78 +6,85 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/app_bg"
-    tools:context=".activities.SignInActivity">
+    tools:context=".fragments.LauncherFragment">
 
     <Button
-        android:id="@+id/btnGuest"
+        android:id="@+id/btnSkip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginRight="@dimen/_15sdp"
-        android:background="@drawable/btn_skip"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:background="@drawable/btn_skip_style"
         android:fontFamily="@font/myfont"
-        android:text="SKIP"
+        android:text="Skip"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvAppTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="164dp"
         android:fontFamily="@font/myfont"
         android:gravity="center"
         android:text="Food App"
         android:textColor="@color/white"
         android:textSize="@dimen/_40ssp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
+
+    <LinearLayout
         android:id="@+id/btnGoogle"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/_5sdp"
-        android:layout_marginEnd="@dimen/_5sdp"
-        android:background="@drawable/btn_google"
-        app:layout_constraintBottom_toBottomOf="@+id/btnFacebook"
-        app:layout_constraintEnd_toStartOf="@+id/btnFacebook"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnFacebook"
-        app:srcCompat="@drawable/ic_google" />
-
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/btnFacebook"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_30sdp"
         android:layout_marginStart="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_320sdp"
         android:layout_marginEnd="@dimen/_5sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/textView"/>
-
-
-    <LinearLayout
-        android:id="@+id/btnSignUp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_30sdp"
-        android:background="@drawable/btn_google"
+        android:background="@drawable/btn_google_style"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="@dimen/_7sdp"
-        app:layout_constraintEnd_toEndOf="@+id/btnFacebook"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAppTitle">
+
+        <ImageView
+            android:id="@+id/icon2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_google_2" />
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/myfont"
+            android:text="Continue with Google"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/btnSignUp"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:background="@drawable/btn_google_style"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/btnGoogle"
         app:layout_constraintStart_toStartOf="@+id/btnGoogle"
-        app:layout_constraintTop_toBottomOf="@+id/btnFacebook">
+        app:layout_constraintTop_toBottomOf="@+id/btnGoogle">
 
         <ImageView
             android:id="@+id/icon"
@@ -90,16 +97,36 @@
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SIGN UP WITH EMAIL"
+            android:fontFamily="@font/myfont"
+            android:text="Sign up with Email"
             android:textColor="@color/black"
             android:textStyle="bold" />
     </LinearLayout>
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
+
+
+    <TextView
+        android:id="@+id/tvLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/myfont"
+        android:gravity="center"
+        android:text="@string/already_user"
+        android:textColor="@color/already_user_selector"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSignUp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

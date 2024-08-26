@@ -33,7 +33,6 @@ import com.example.foodapp.viewmodels.SearchViewModel
 
 
 class SearchFragment : Fragment() {
-    private lateinit var userPhoto : ImageView
     private lateinit var searchBar : SearchView
     private lateinit var tvViewAllIngredients : TextView
     private lateinit var tvViewAllCategories : TextView
@@ -64,10 +63,6 @@ class SearchFragment : Fragment() {
         handleViewAllCategories()
         handleViewAllCountries()
 
-        val mainActivity  = requireActivity() as MainActivity
-        mainActivity.showUserPhoto(userPhoto)
-        mainActivity.handleUserPhotoOnClick(userPhoto)
-
     }
 
 
@@ -77,7 +72,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun initUI(view : View){
-        userPhoto = view.findViewById(R.id.ivUserPhoto)
         searchBar = view.findViewById(R.id.search_bar)
         tvViewAllIngredients = view.findViewById(R.id.tvViewAllIngredients)
         tvViewAllCategories = view.findViewById(R.id.tvViewAllCategories)

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.foodapp.R
 import com.example.foodapp.Util
 import com.example.foodapp.activities.MainActivity
-import com.example.foodapp.activities.SignInActivity
+import com.example.foodapp.activities.LauncherActivity
 import com.example.foodapp.adapters.MealAdapter
 import com.example.foodapp.db.MealDatabase
 import com.example.foodapp.pojo.Meal
@@ -26,8 +26,6 @@ import com.google.firebase.auth.auth
 
 
 class FavouritesFragment : Fragment() {
-    private lateinit var userPhoto : ImageView
-    private lateinit var tvFavourites: TextView
     private lateinit var rvFavourites: RecyclerView
     private lateinit var mealAdapter: MealAdapter
     private lateinit var favouritesViewModel: FavouritesViewModel
@@ -45,10 +43,6 @@ class FavouritesFragment : Fragment() {
         prepareRecyclerView()
         setupViewModel()
         setupObserver()
-
-        val mainActivity  = requireActivity() as MainActivity
-        mainActivity.showUserPhoto(userPhoto)
-        mainActivity.handleUserPhotoOnClick(userPhoto)
     }
 
     override fun onResume() {
@@ -58,8 +52,6 @@ class FavouritesFragment : Fragment() {
         showFavourites()
     }
     private fun initUI(view : View){
-        userPhoto = view.findViewById(R.id.ivUserPhoto)
-        tvFavourites = view.findViewById(R.id.tvFavourites)
         rvFavourites = view.findViewById(R.id.rvFavourites)
     }
 
@@ -93,7 +85,7 @@ class FavouritesFragment : Fragment() {
                 "Cancel",
                 "Sign In",
                 requireActivity(),
-                SignInActivity::class.java
+                LauncherActivity::class.java
             )
         }
     }

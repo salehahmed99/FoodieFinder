@@ -12,13 +12,14 @@
         android:id="@+id/tvAllContents"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_25sdp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/myfont"
         android:gravity="center"
         android:textColor="@color/navy"
         android:textSize="@dimen/_20ssp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="All Contents" />
@@ -28,11 +29,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_25sdp"
-        android:background="@drawable/img_btn_ripple"
+        android:background="@drawable/white_oval_bg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_back_arrow"
-        app:tint="@color/white" />
+        app:tint="@color/on_click_selector" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAllContents"
         android:layout_width="0dp"

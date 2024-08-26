@@ -123,7 +123,7 @@ class MealViewActivity : AppCompatActivity() {
                     "Cancel",
                     "Sign In",
                     this,
-                    SignInActivity::class.java
+                    LauncherActivity::class.java
                 )
             }
         }

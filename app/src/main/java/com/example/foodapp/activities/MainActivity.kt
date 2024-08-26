@@ -3,7 +3,10 @@ package com.example.foodapp.activities
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -17,13 +20,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
 
 class MainActivity : AppCompatActivity() {
-
+    private lateinit var userPhoto : ImageView
+    private lateinit var tvTitle : TextView
     private lateinit var botNavView : BottomNavigationView
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -34,21 +39,48 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         auth = Firebase.auth
         initUI()
+        showUserPhoto()
+        handleUserPhotoOnClick()
         setupBotNavMenu()
         setupFirebase()
     }
     private fun initUI(){
         botNavView = findViewById(R.id.bot_nav_view)
+        userPhoto = findViewById(R.id.ivUserPhoto)
+        tvTitle = findViewById(R.id.tvTitle)
     }
 
     private fun setupBotNavMenu(){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.findNavController()
-        botNavView.setupWithNavController(navController)
+
+        botNavView.setOnItemSelectedListener(object : NavigationBarView.OnItemSelectedListener{
+            override fun onNavigationItemSelected(item: MenuItem): Boolean {
+                when(item.itemId){
+                    R.id.homeFragment -> {
+                        navController.navigate(R.id.homeFragment)
+                        tvTitle.text = "Home"
+                        return true
+                    }
+                    R.id.searchFragment -> {
+                        navController.navigate(R.id.searchFragment)
+                        tvTitle.text = "Search"
+                        return true
+                    }
+                    R.id.favouritesFragment -> {
+                        navController.navigate(R.id.favouritesFragment)
+                        tvTitle.text = "Favourites"
+                        return true
+                    }
+                    else ->
+                        return false
+                }
+            }
+        })
     }
 
 
-    fun showUserPhoto(userPhoto: ImageView) {
+    fun showUserPhoto() {
         val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
         if (googleSignInAccount != null) {
             val photoUrl = googleSignInAccount.photoUrl
@@ -58,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun handleUserPhotoOnClick(userPhoto: ImageView) {
+    fun handleUserPhotoOnClick() {
         userPhoto.setOnClickListener {
             val currentUser = auth.currentUser
             if (currentUser == null) {
@@ -68,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                     "Cancel",
                     "Sign In",
                     this,
-                    SignInActivity::class.java
+                    LauncherActivity::class.java
                 )
             } else {
                 showLogOutAlertDialog()
@@ -87,7 +119,7 @@ class MainActivity : AppCompatActivity() {
     private fun signOutAndStartSignInActivity() {
         auth.signOut()
         googleSignInClient.signOut().addOnCompleteListener(this) {
-            val intent = Intent(this, SignInActivity::class.java)
+            val intent = Intent(this, LauncherActivity::class.java)
             startActivity(intent)
             this.finish()
         }
