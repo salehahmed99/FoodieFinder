@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
@@ -19,8 +18,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.foodapp.R
 import com.example.foodapp.activities.AllContentsActivity
 import com.example.foodapp.activities.AllMealsActivity
-import com.example.foodapp.activities.MainActivity
-import com.example.foodapp.activities.MealViewActivity
 import com.example.foodapp.adapters.CategoryAdapter
 import com.example.foodapp.adapters.CountryAdapter
 import com.example.foodapp.adapters.IngredientAdapter

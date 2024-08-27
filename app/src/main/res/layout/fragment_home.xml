@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
             android:fontFamily="@font/myfont"
-            android:text="Poplar Meals"
+            android:text="Popular Meals"
             android:textColor="@color/navy"
             android:textSize="@dimen/_20ssp"
             android:textStyle="bold"

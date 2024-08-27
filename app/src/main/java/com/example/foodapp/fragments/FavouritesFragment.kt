@@ -5,18 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodapp.R
 import com.example.foodapp.Util
-import com.example.foodapp.activities.MainActivity
 import com.example.foodapp.activities.LauncherActivity
 import com.example.foodapp.adapters.MealAdapter
-import com.example.foodapp.db.MealDatabase
+import com.example.foodapp.db.AppDatabase
 import com.example.foodapp.pojo.Meal
 import com.example.foodapp.viewmodels.FavouritesFactory
 import com.example.foodapp.viewmodels.FavouritesViewModel
@@ -61,7 +58,7 @@ class FavouritesFragment : Fragment() {
         rvFavourites.layoutManager = GridLayoutManager(requireContext(), 2)
     }
     private fun setupViewModel() {
-        val mealDao = MealDatabase.getInstance(requireActivity()).getMealDao()
+        val mealDao = AppDatabase.getInstance(requireActivity()).getMealDao()
         val factory = FavouritesFactory(mealDao)
         favouritesViewModel = ViewModelProvider(this , factory).get(FavouritesViewModel::class.java)
     }

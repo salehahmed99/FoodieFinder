@@ -8,12 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.foodapp.R
 import com.example.foodapp.activities.AllMealsActivity
 import com.example.foodapp.pojo.Country
-import java.util.Locale
-
 class CountryAdapter(var countries: List<Country> , val layoutRes : Int , val activity : Activity) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() {
     class CountryViewHolder(val countryItem : View) : RecyclerView.ViewHolder(countryItem) {
         val name: TextView = countryItem.findViewById(R.id.tvName)

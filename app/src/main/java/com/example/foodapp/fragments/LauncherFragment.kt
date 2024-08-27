@@ -10,10 +10,15 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.foodapp.R
 import com.example.foodapp.Util
 import com.example.foodapp.activities.MainActivity
+import com.example.foodapp.db.AppDatabase
+import com.example.foodapp.viewmodels.UserFactory
+import com.example.foodapp.viewmodels.UserViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -31,6 +36,7 @@ class LauncherFragment : Fragment() {
     private lateinit var tvLogin : TextView
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var userViewModel: UserViewModel
 
     companion object {
         private const val RC_SIGN_IN = 9001
@@ -43,6 +49,8 @@ class LauncherFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI(view)
+        setupViewModel()
+        setupObserver()
         auth = Firebase.auth
 
         btnGoogle.setOnClickListener {
@@ -75,12 +83,31 @@ class LauncherFragment : Fragment() {
         tvLogin = view.findViewById(R.id.tvLogin)
     }
 
+    private fun setupViewModel(){
+        val userDao = AppDatabase.getInstance(requireActivity()).getUserDao()
+        val factory = UserFactory(userDao)
+        userViewModel = ViewModelProvider(this , factory).get(UserViewModel::class.java)
+    }
+
+    private fun setupObserver(){
+        val userNameObserver = Observer<String>{ name->
+            val firstName = name.split(" ").get(0)
+            Toast.makeText(requireActivity(), "Welcome back $firstName", Toast.LENGTH_SHORT).show()
+        }
+        userViewModel.name.observe(viewLifecycleOwner , userNameObserver)
+    }
+
+
     override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            val firstName = currentUser.displayName?.split(" ")?.get(0)
-            Toast.makeText(requireActivity(), "Welcome back $firstName", Toast.LENGTH_SHORT).show()
+            if (currentUser.displayName.isNullOrBlank())
+                userViewModel.getUserNameById(currentUser.uid)
+            else{
+                val firstName = currentUser.displayName?.split(" ")?.get(0)
+                Toast.makeText(requireActivity(), "Welcome back $firstName", Toast.LENGTH_SHORT).show()
+            }
             val intent = Intent(requireActivity(), MainActivity::class.java)
             startActivity(intent)
             requireActivity().finish()

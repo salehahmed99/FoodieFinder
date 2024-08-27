@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 import com.example.foodapp.R
 import com.example.foodapp.Util
 import com.example.foodapp.adapters.IngredientAdapter
-import com.example.foodapp.db.MealDatabase
+import com.example.foodapp.db.AppDatabase
 import com.example.foodapp.network.RetrofitHelper
 import com.example.foodapp.pojo.Ingredient
 import com.example.foodapp.pojo.Meal
@@ -83,7 +83,7 @@ class MealViewActivity : AppCompatActivity() {
 
     private fun setupViewModel(){
         val retrofitService = RetrofitHelper.retrofitService
-        val mealDao = MealDatabase.getInstance(this).getMealDao()
+        val mealDao = AppDatabase.getInstance(this).getMealDao()
         val factory = MealFactory(retrofitService , mealDao)
         mealViewModel = ViewModelProvider(this , factory).get(MealViewModel::class.java)
     }

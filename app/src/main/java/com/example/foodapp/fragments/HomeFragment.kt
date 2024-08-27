@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodapp.R
-import com.example.foodapp.activities.MainActivity
 import com.example.foodapp.activities.MealViewActivity
 import com.example.foodapp.adapters.MealAdapter
 import com.example.foodapp.pojo.Meal

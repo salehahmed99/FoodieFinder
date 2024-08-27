@@ -6,6 +6,8 @@
     <string name="viewAll"><u>VIEW ALL</u></string>
     <string name="no_results">We couldn\'t find anything matching your search. Try searching other keywords</string>
     <string name="already_user">Already have an account? <u>Log In</u></string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
 
 
 </resources>
