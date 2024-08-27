@@ -63,6 +63,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/myfont"
             android:textColor="@color/navy"
+            android:inputType="textPersonName"
             android:hint="Display Name" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,6 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/myfont"
+            android:inputType="textEmailAddress"
             android:hint="Email" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -107,6 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/myfont"
+            android:inputType="textPassword"
             android:hint="Password" />
 
     </com.google.android.material.textfield.TextInputLayout>

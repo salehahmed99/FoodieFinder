@@ -12,15 +12,14 @@
         android:id="@+id/tvAllMeals"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_28sdp"
         android:fontFamily="@font/myfont"
         android:gravity="center"
         android:textColor="@color/navy"
         android:textSize="@dimen/_15ssp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgBtnBack"
+        app:layout_constraintTop_toTopOf="@+id/imgBtnBack"
         tools:text="All Meals" />
 
     <TextView

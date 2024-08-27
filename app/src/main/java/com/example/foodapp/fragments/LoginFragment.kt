@@ -9,14 +9,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.foodapp.R
 import com.example.foodapp.activities.MainActivity
-import com.example.foodapp.db.AppDatabase
-import com.example.foodapp.viewmodels.UserFactory
-import com.example.foodapp.viewmodels.UserViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -29,7 +24,6 @@ class LoginFragment : Fragment() {
     private lateinit var etPass : TextInputEditText
     private lateinit var btnStartCooking : Button
     private lateinit var auth : FirebaseAuth
-    private lateinit var userViewModel: UserViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
@@ -39,8 +33,6 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initUI(view)
         auth = Firebase.auth
-        setupViewModel()
-        setupObserver()
         onStartCookingBtnClick()
         onBackBtnClick()
     }
@@ -52,24 +44,11 @@ class LoginFragment : Fragment() {
         btnStartCooking = view.findViewById(R.id.btnStartCooking)
     }
 
-    private fun setupViewModel(){
-        val userDao = AppDatabase.getInstance(requireActivity()).getUserDao()
-        val factory = UserFactory(userDao)
-        userViewModel = ViewModelProvider(this , factory).get(UserViewModel::class.java)
-    }
-
-    private fun setupObserver(){
-        val userNameObserver = Observer<String>{ name->
-            Toast.makeText(requireActivity(), "Signed in as $name", Toast.LENGTH_SHORT).show()
-        }
-        userViewModel.name.observe(viewLifecycleOwner , userNameObserver)
-    }
-
     private fun onStartCookingBtnClick() {
         btnStartCooking.setOnClickListener {
-            val email = etEmail.text.toString()
+            val email = etEmail.text.toString().replace("\\s".toRegex(), "")
             val pass = etPass.text.toString()
-            if (email.isBlank()) {
+            if (email.isEmpty()) {
                 Toast.makeText(activity, "Enter your Email!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -84,7 +63,8 @@ class LoginFragment : Fragment() {
         auth.signInWithEmailAndPassword(email, pass)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    userViewModel.getUserNameById(auth.currentUser?.uid!!)
+                    val currentUser = auth.currentUser
+                    Toast.makeText(requireActivity(), "Signed in as ${currentUser?.displayName}", Toast.LENGTH_SHORT).show()
                     val intent = Intent(requireActivity(), MainActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()

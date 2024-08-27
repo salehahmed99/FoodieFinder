@@ -7,31 +7,22 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.example.foodapp.R
 import com.example.foodapp.Util
-import com.example.foodapp.db.AppDatabase
-import com.example.foodapp.viewmodels.UserFactory
-import com.example.foodapp.viewmodels.UserViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -50,20 +41,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toggle : ActionBarDrawerToggle
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var userViewModel: UserViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         auth = Firebase.auth
         initUI()
-        setupViewModel()
-        setupObserver()
         setupBotNavMenu()
         setupDrawerNavigationView()
         showUserPhoto(userPhoto)
-        showUserPhoto(drawerUserPhoto)
         handleUserPhotoOnClick()
         setupFirebase()
     }
@@ -79,18 +65,6 @@ class MainActivity : AppCompatActivity() {
         drawerUserPhoto = navHeader.findViewById(R.id.ivUserPhoto)
     }
 
-    private fun setupViewModel(){
-        val userDao = AppDatabase.getInstance(this).getUserDao()
-        val factory = UserFactory(userDao)
-        userViewModel = ViewModelProvider(this , factory).get(UserViewModel::class.java)
-    }
-
-    private fun setupObserver(){
-        val userNameObserver = Observer<String>{ name->
-            tvUserName.text = name
-        }
-        userViewModel.name.observe(this , userNameObserver)
-    }
 
     private fun setupBotNavMenu() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -109,7 +83,6 @@ class MainActivity : AppCompatActivity() {
         toggle = ActionBarDrawerToggle(this , drawerLayout , R.string.navigation_drawer_open , R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
-
         drawerNavView.setNavigationItemSelectedListener( object : NavigationView.OnNavigationItemSelectedListener{
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
                 when(item.itemId){
@@ -147,13 +120,9 @@ class MainActivity : AppCompatActivity() {
                 )
             }
             else{
-                if (currentUser.displayName.isNullOrBlank()){
-                    userViewModel.getUserNameById(currentUser.uid)
-                }
-                else{
-                    tvUserName.text = currentUser.displayName
-                }
                 drawerLayout.openDrawer(GravityCompat.START)
+                showUserPhoto(drawerUserPhoto)
+                tvUserName.text = currentUser.displayName
             }
         }
     }
