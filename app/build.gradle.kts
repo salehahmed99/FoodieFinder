@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.foodapp"
+    namespace = "com.example.foodiefinder"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.foodapp"
+        applicationId = "com.example.foodiefinder"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -86,9 +86,6 @@ dependencies {
 
     //Splash Screen
     implementation("androidx.core:core-splashscreen:1.0.0")
-
-    //Facebook Log in
-    implementation ("com.facebook.android:facebook-android-sdk:latest.release")
 
 
 }

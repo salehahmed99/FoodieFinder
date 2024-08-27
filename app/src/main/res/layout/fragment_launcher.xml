@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/myfont"
         android:gravity="center"
-        android:text="Food App"
+        android:text="Foodie Finder"
         android:textColor="@color/white"
         android:textSize="@dimen/_40ssp"
         android:textStyle="bold"

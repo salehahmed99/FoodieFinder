@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.foodapp.fragments.LoginFragment"
+        android:name="com.example.foodiefinder.fragments.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/launcherFragment"
-        android:name="com.example.foodapp.fragments.LauncherFragment"
+        android:name="com.example.foodiefinder.fragments.LauncherFragment"
         android:label="fragment_launcher"
         tools:layout="@layout/fragment_launcher" >
         <action
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.example.foodapp.fragments.SignupFragment"
+        android:name="com.example.foodiefinder.fragments.SignupFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" >
         <action

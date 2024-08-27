@@ -6,9 +6,3 @@ plugins {
 }
 
 
-//Facebook Log in
-buildscript{
-    repositories{
-        mavenCentral()
-    }
-}
