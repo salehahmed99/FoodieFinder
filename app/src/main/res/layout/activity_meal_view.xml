@@ -137,7 +137,7 @@
                     android:id="@+id/tvStepByStep"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_margin="@dimen/_10sdp"
                     android:fontFamily="@font/myfont"
                     android:textColor="@color/navy"
                     android:textSize="@dimen/_12ssp"
