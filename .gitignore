@@ -7,8 +7,11 @@
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+/.idea/discord.xml
 .DS_Store
-/build
+/app/build
+/app/release
+/app/google-services.json
 /captures
 .externalNativeBuild
 .cxx
