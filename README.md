@@ -50,6 +50,7 @@ Your go-to app for exploring delicious recipes from around the world! FoodieFind
 #### Meal Overview
 <div align="center">
   <img src="https://github.com/salehahmed99/FoodieFinder/blob/main/readme-assets/mealdetails.png" height = "500"  alt="mobile-image" />
+  <img src="https://github.com/salehahmed99/FoodieFinder/blob/main/readme-assets/mealdetails3.png" height = "500"  alt="mobile-image" />
   <img src="https://github.com/salehahmed99/FoodieFinder/blob/main/readme-assets/mealdetails2.png" height = "500"  alt="mobile-image" />
 </div>
 
