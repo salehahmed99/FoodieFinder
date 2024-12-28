@@ -1,6 +1,8 @@
 # 🍔 FoodieFinder
 
-Your go-to app for exploring delicious recipes from around the world! FoodieFinder makes it easy to discover, save, and cook meals with step-by-step guidance.  
+Your go-to app for exploring delicious recipes from around the world! FoodieFinder makes it easy to discover, save, and cook meals with step-by-step guidance. 
+
+### Try it out now! [FoodieFinder](https://drive.google.com/drive/u/0/folders/1YR_uFUiSWo5IabSf1Q_AVSafDGCoJaX-).
 
 ## ✨ Key Features:
 - **Intuitive Browsing**: Effortlessly browse a wide variety of recipes based on ingredients, categories, and countries.  
